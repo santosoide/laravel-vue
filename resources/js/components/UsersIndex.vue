@@ -13,7 +13,7 @@
 
         <div class="pagination">
             <button :disabled="! prevPage" @click.prevent="goToPrev">Previous</button>
-            {{ paginatonCount }}
+            {{ paginationCount }}
             <button :disabled="! nextPage" @click.prevent="goToNext">Next</button>
         </div>
     </div>
@@ -34,7 +34,13 @@
         data() {
             return {
                 users: null,
-                meta: null,
+                meta: {
+                    current_page: null,
+                    last_page: null,
+                    to: null,
+                    total: null,
+                    from: null
+                },
                 links: {
                     first: null,
                     last: null,
@@ -57,7 +63,7 @@
                 }
                 return this.meta.current_page - 1;
             },
-            paginatonCount() {
+            paginationCount() {
                 if (! this.meta) {
                     return;
                 }
