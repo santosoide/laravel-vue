@@ -22,15 +22,15 @@
                 <td>{{name}}</td>
                 <td>{{email}}</td>
                 <td>
-                    <div class="btn-toolbar mb-3" role="toolbar">
-                        <div class="btn-group mr-2" role="group">
+                    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
                             <router-link  class="btn btn-secondary" :to="{ name: 'users.edit', params: { id } }">Edit</router-link>
-                            <button type="button" class="btn btn-danger" @click.prevent="goToNext">Delete</button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" @click="showModal">Delete</button>
+                            <modal v-show="isModalVisible" @close="closeModal"></modal>
                         </div>
                     </div>
                 </td>
             </tr>
-
             </tbody>
         </table>
         </div>
@@ -42,10 +42,12 @@
                 <button type="button" class="btn btn-secondary" :disabled="! nextPage" @click.prevent="goToNext">Next</button>
             </div>
         </div>
+
     </div>
 </template>
 <script>
     import axios from 'axios';
+    import api from '../api/users';
     const getUsers = (page, callback) => {
         const params = { page };
         axios
@@ -59,6 +61,7 @@
     export default {
         data() {
             return {
+                isModalVisible: false,
                 users: null,
                 meta: {
                     current_page: null,
@@ -112,6 +115,12 @@
             });
         },
         methods: {
+            showModal() {
+                this.isModalVisible = true;
+            },
+            closeModal() {
+                this.isModalVisible = false;
+            },
             goToNext() {
                 this.$router.push({
                     query: {
