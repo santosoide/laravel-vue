@@ -1,5 +1,8 @@
 <template>
     <div class="users">
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <router-link class="btn btn-secondary"  :to="{ name: 'users.create' }">Create</router-link>
+        </div>
         <div v-if="error" class="error">
             <p>{{ error }}</p>
         </div>
@@ -116,7 +119,6 @@
                 });
             },
             setData(err, data) {
-                console.log(data);
                 if (err) {
                     this.error = err.toString();
                 } else {

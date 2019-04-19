@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserCreateRequest;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class UserController extends Controller
         return User::paginate();
     }
 
-    public function store(Request $request){
+    public function store(UserCreateRequest $request){
         return User::create($request->all());
     }
 
