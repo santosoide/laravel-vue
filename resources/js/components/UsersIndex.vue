@@ -14,12 +14,21 @@
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
+                <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="{ id, name, email } in users">
                 <td>{{name}}</td>
                 <td>{{email}}</td>
+                <td>
+                    <div class="btn-toolbar mb-3" role="toolbar">
+                        <div class="btn-group mr-2" role="group">
+                            <router-link  class="btn btn-secondary" :to="{ name: 'users.edit', params: { id } }">Edit</router-link>
+                            <button type="button" class="btn btn-danger" @click.prevent="goToNext">Delete</button>
+                        </div>
+                    </div>
+                </td>
             </tr>
 
             </tbody>

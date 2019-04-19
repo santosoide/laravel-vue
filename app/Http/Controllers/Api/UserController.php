@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserEditRequest;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class UserController extends Controller
         return User::find($id);
     }
 
-    public function update(Request $request, $id){
+    public function update(UserEditRequest $request, $id){
         $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;
