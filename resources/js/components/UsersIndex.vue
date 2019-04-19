@@ -4,17 +4,31 @@
             <p>{{ error }}</p>
         </div>
 
-        <ul v-if="users">
-            <li v-for="{ id, name, email } in users">
-                <strong>Name:</strong> {{ name }},
-                <strong>Email:</strong> {{ email }}
-            </li>
-        </ul>
+        <div v-if="users">
 
-        <div class="pagination">
-            <button :disabled="! prevPage" @click.prevent="goToPrev">Previous</button>
-            {{ paginationCount }}
-            <button :disabled="! nextPage" @click.prevent="goToNext">Next</button>
+        <table class="table table-striped table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="{ id, name, email } in users">
+                <td>{{name}}</td>
+                <td>{{email}}</td>
+            </tr>
+
+            </tbody>
+        </table>
+        </div>
+
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <button type="button" class="btn btn-secondary" :disabled="! prevPage" @click.prevent="goToPrev">Previous</button>
+                <button type="button" class="btn btn-secondary" disabled>{{ paginationCount }}</button>
+                <button type="button" class="btn btn-secondary" :disabled="! nextPage" @click.prevent="goToNext">Next</button>
+            </div>
         </div>
     </div>
 </template>
