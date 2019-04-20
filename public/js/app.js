@@ -1816,9 +1816,23 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'modal',
+  props: {
+    method: {
+      type: Function
+    },
+    user: {
+      type: Object
+    }
+  },
+  data: function data() {
+    return {};
+  },
   methods: {
     close: function close() {
       this.$emit('close');
+    },
+    onDelete: function onDelete() {
+      this.method(this.user.id);
     }
   }
 });
@@ -2084,7 +2098,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -2104,8 +2117,10 @@ var getUsers = function getUsers(page, callback) {
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      renderComponent: true,
       isModalVisible: false,
       users: null,
+      selected: null,
       meta: {
         current_page: null,
         last_page: null,
@@ -2137,6 +2152,9 @@ var getUsers = function getUsers(page, callback) {
 
       return this.meta.current_page - 1;
     },
+    currentPage: function currentPage() {
+      return this.meta.current_page;
+    },
     paginationCount: function paginationCount() {
       if (!this.meta) {
         return;
@@ -2146,6 +2164,9 @@ var getUsers = function getUsers(page, callback) {
           current_page = _this$meta.current_page,
           last_page = _this$meta.last_page;
       return "".concat(current_page, " of ").concat(last_page);
+    },
+    selectedUser: function selectedUser() {
+      return this.selected;
     }
   },
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
@@ -2167,8 +2188,12 @@ var getUsers = function getUsers(page, callback) {
       next();
     });
   },
+  updated: function updated() {
+    vm.$forceUpdate();
+  },
   methods: {
-    showModal: function showModal() {
+    showModal: function showModal(data) {
+      this.selected = data;
       this.isModalVisible = true;
     },
     closeModal: function closeModal() {
@@ -2186,6 +2211,14 @@ var getUsers = function getUsers(page, callback) {
         name: 'users.index',
         query: {
           page: this.prevPage
+        }
+      });
+    },
+    goHome: function goHome() {
+      this.$router.push({
+        name: 'users.index',
+        query: {
+          page: 1
         }
       });
     },
@@ -2208,6 +2241,23 @@ var getUsers = function getUsers(page, callback) {
           from: data.from
         };
       }
+    },
+    deleteUser: function deleteUser(id) {
+      var _this2 = this;
+
+      _api_users__WEBPACK_IMPORTED_MODULE_1__["default"]["delete"](id).then(function (response) {
+        if (response) {
+          _this2.selected = null;
+          setTimeout(function () {
+            return _this2.$router.push({
+              name: 'users.index',
+              query: {
+                page: 1
+              }
+            });
+          }, 500);
+        }
+      });
     }
   }
 });
@@ -37687,8 +37737,17 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "button",
-                  { staticClass: "btn btn-primary", attrs: { type: "button" } },
-                  [_vm._v("Save changes")]
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button", "data-dismiss": "modal" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.onDelete($event)
+                      }
+                    }
+                  },
+                  [_vm._v("Delete")]
                 )
               ])
             ])
@@ -38195,176 +38254,193 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "users" }, [
-    _c(
-      "div",
-      {
-        staticClass: "btn-toolbar mb-3",
-        attrs: { role: "toolbar", "aria-label": "Toolbar with button groups" }
-      },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-secondary",
-            attrs: { to: { name: "users.create" } }
-          },
-          [_vm._v("Create")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _vm.error
-      ? _c("div", { staticClass: "error" }, [
-          _c("p", [_vm._v(_vm._s(_vm.error))])
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.users
-      ? _c("div", [
-          _c("table", { staticClass: "table table-striped table-hover" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.users, function(ref) {
-                var id = ref.id
-                var name = ref.name
-                var email = ref.email
-                return _c("tr", [
-                  _c("td", [_vm._v(_vm._s(name))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(email))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "btn-toolbar mb-3",
-                        attrs: {
-                          role: "toolbar",
-                          "aria-label": "Toolbar with button groups"
-                        }
-                      },
-                      [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "btn-group mr-2",
-                            attrs: {
-                              role: "group",
-                              "aria-label": "First group"
-                            }
-                          },
-                          [
-                            _c(
-                              "router-link",
-                              {
-                                staticClass: "btn btn-secondary",
-                                attrs: {
-                                  to: { name: "users.edit", params: { id: id } }
-                                }
-                              },
-                              [_vm._v("Edit")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-danger",
-                                attrs: {
-                                  type: "button",
-                                  "data-toggle": "modal",
-                                  "data-target": "#exampleModal"
-                                },
-                                on: { click: _vm.showModal }
-                              },
-                              [_vm._v("Delete")]
-                            ),
-                            _vm._v(" "),
-                            _c("modal", {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.isModalVisible,
-                                  expression: "isModalVisible"
-                                }
-                              ],
-                              on: { close: _vm.closeModal }
-                            })
-                          ],
-                          1
-                        )
-                      ]
-                    )
-                  ])
-                ])
-              }),
-              0
-            )
+  return _c(
+    "div",
+    { staticClass: "users" },
+    [
+      _c(
+        "div",
+        {
+          staticClass: "btn-toolbar mb-3",
+          attrs: { role: "toolbar", "aria-label": "Toolbar with button groups" }
+        },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-secondary",
+              attrs: { to: { name: "users.create" } }
+            },
+            [_vm._v("Create")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.error
+        ? _c("div", { staticClass: "error" }, [
+            _c("p", [_vm._v(_vm._s(_vm.error))])
           ])
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "btn-toolbar mb-3",
-        attrs: { role: "toolbar", "aria-label": "Toolbar with button groups" }
-      },
-      [
-        _c(
-          "div",
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.users
+        ? _c("div", [
+            _c("table", { staticClass: "table table-striped table-hover" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.users, function(ref) {
+                  var id = ref.id
+                  var name = ref.name
+                  var email = ref.email
+                  return _c("tr", [
+                    _c("td", [_vm._v(_vm._s(name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(email))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "btn-toolbar mb-3",
+                          attrs: {
+                            role: "toolbar",
+                            "aria-label": "Toolbar with button groups"
+                          }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "btn-group mr-2",
+                              attrs: {
+                                role: "group",
+                                "aria-label": "First group"
+                              }
+                            },
+                            [
+                              _c(
+                                "router-link",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: {
+                                    to: {
+                                      name: "users.edit",
+                                      params: { id: id }
+                                    }
+                                  }
+                                },
+                                [_vm._v("Edit")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-danger",
+                                  attrs: {
+                                    type: "button",
+                                    "data-toggle": "modal",
+                                    "data-target": "#exampleModal"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.showModal({
+                                        id: id,
+                                        name: name,
+                                        email: email
+                                      })
+                                    }
+                                  }
+                                },
+                                [_vm._v("Delete")]
+                              )
+                            ],
+                            1
+                          )
+                        ]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "btn-toolbar mb-3",
+          attrs: { role: "toolbar", "aria-label": "Toolbar with button groups" }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "btn-group mr-2",
+              attrs: { role: "group", "aria-label": "First group" }
+            },
+            [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button", disabled: !_vm.prevPage },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.goToPrev($event)
+                    }
+                  }
+                },
+                [_vm._v("Previous")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button", disabled: "" }
+                },
+                [_vm._v(_vm._s(_vm.paginationCount))]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button", disabled: !_vm.nextPage },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.goToNext($event)
+                    }
+                  }
+                },
+                [_vm._v("Next")]
+              )
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("modal", {
+        directives: [
           {
-            staticClass: "btn-group mr-2",
-            attrs: { role: "group", "aria-label": "First group" }
-          },
-          [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-secondary",
-                attrs: { type: "button", disabled: !_vm.prevPage },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.goToPrev($event)
-                  }
-                }
-              },
-              [_vm._v("Previous")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-secondary",
-                attrs: { type: "button", disabled: "" }
-              },
-              [_vm._v(_vm._s(_vm.paginationCount))]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-secondary",
-                attrs: { type: "button", disabled: !_vm.nextPage },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.goToNext($event)
-                  }
-                }
-              },
-              [_vm._v("Next")]
-            )
-          ]
-        )
-      ]
-    )
-  ])
+            name: "show",
+            rawName: "v-show",
+            value: _vm.isModalVisible,
+            expression: "isModalVisible"
+          }
+        ],
+        attrs: { user: _vm.selectedUser, method: _vm.deleteUser },
+        on: { close: _vm.closeModal }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -53233,8 +53309,8 @@ __webpack_require__.r(__webpack_exports__);
   update: function update(id, data) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/".concat(id), data);
   },
-  "delete": function _delete(id, data) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/".concat(id), data);
+  "delete": function _delete(id) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/users/".concat(id));
   }
 });
 
@@ -53249,7 +53325,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
 /* harmony import */ var _components_Hello__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Hello */ "./resources/js/components/Hello.vue");
 /* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Home */ "./resources/js/components/Home.vue");
@@ -53315,13 +53391,15 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
     component: _components_UserEdit__WEBPACK_IMPORTED_MODULE_6__["default"]
   }]
 });
-var app = new Vue({
+var vm = new Vue({
   el: '#app',
   components: {
     App: _components_App__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   router: router
 });
+global.vm = vm; //Define you app variable globally
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 

@@ -13,7 +13,7 @@ export default {
     update(id, data) {
         return axios.put(`/api/users/${id}`, data);
     },
-    delete(id, data) {
-        return axios.put(`/api/users/${id}`, data);
+    delete(id) {
+        return axios.delete(`/api/users/${id}`);
     },
 };

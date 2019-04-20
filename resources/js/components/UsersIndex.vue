@@ -25,8 +25,7 @@
                     <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                         <div class="btn-group mr-2" role="group" aria-label="First group">
                             <router-link  class="btn btn-secondary" :to="{ name: 'users.edit', params: { id } }">Edit</router-link>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" @click="showModal">Delete</button>
-                            <modal v-show="isModalVisible" @close="closeModal"></modal>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" @click="showModal({id, name, email})">Delete</button>
                         </div>
                     </div>
                 </td>
@@ -42,7 +41,7 @@
                 <button type="button" class="btn btn-secondary" :disabled="! nextPage" @click.prevent="goToNext">Next</button>
             </div>
         </div>
-
+        <modal v-show="isModalVisible" :user="selectedUser" @close="closeModal" :method="deleteUser"></modal>
     </div>
 </template>
 <script>
@@ -61,8 +60,10 @@
     export default {
         data() {
             return {
+                renderComponent: true,
                 isModalVisible: false,
                 users: null,
+                selected: null,
                 meta: {
                     current_page: null,
                     last_page: null,
@@ -92,6 +93,9 @@
                 }
                 return this.meta.current_page - 1;
             },
+            currentPage() {
+                return this.meta.current_page;
+            },
             paginationCount() {
                 if (! this.meta) {
                     return;
@@ -99,6 +103,9 @@
                 const { current_page, last_page } = this.meta;
                 return `${current_page} of ${last_page}`;
             },
+            selectedUser(){
+                return this.selected;
+            }
         },
         beforeRouteEnter (to, from, next) {
             getUsers(to.query.page, (err, data) => {
@@ -114,9 +121,14 @@
                 next();
             });
         },
+        updated(){
+            vm.$forceUpdate();
+        },
         methods: {
-            showModal() {
+            showModal(data) {
+                this.selected = data;
                 this.isModalVisible = true;
+
             },
             closeModal() {
                 this.isModalVisible = false;
@@ -133,6 +145,14 @@
                     name: 'users.index',
                     query: {
                         page: this.prevPage,
+                    }
+                });
+            },
+            goHome() {
+                this.$router.push({
+                    name: 'users.index',
+                    query: {
+                        page: 1,
                     }
                 });
             },
@@ -156,6 +176,16 @@
                     };
                 }
             },
+            deleteUser(id) {
+                api.delete(id).then((response) => {
+                    if(response) {
+                        this.selected = null;
+                        setTimeout(() => this.$router.push({ name: 'users.index',query: {
+                                page: 1,
+                            } }), 500);
+                    }
+                });
+            }
         }
     }
 </script>

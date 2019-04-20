@@ -1,11 +1,21 @@
 <script>
     export default {
         name: 'modal',
+        props: {
+            method: { type: Function },
+            user: {type: Object}
+        },
+        data() {
+            return {};
+        },
         methods: {
             close() {
                 this.$emit('close');
             },
-        },
+            onDelete(){
+                this.method(this.user.id);
+            }
+        }
     };
 </script>
 <template>
@@ -24,7 +34,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-primary" @click.prevent="onDelete" data-dismiss="modal">Delete</button>
                     </div>
                 </div>
             </div>

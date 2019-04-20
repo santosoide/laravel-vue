@@ -73,8 +73,9 @@ const router = new VueRouter({
     ],
 });
 
-const app = new Vue({
+let vm = new Vue({
     el: '#app',
     components: { App },
     router,
 });
+global.vm = vm; //Define you app variable globally
