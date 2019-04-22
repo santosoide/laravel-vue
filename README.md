@@ -48,3 +48,7 @@ $ php serve
 // running npm scripts to watch changes
 $ npm run watch
 ```
+
+### Demo
+
+![Demo Aplikasi](https://github.com/cyberid41/laravel-vue/blob/master/demo%20laravel%20vue.gif)
