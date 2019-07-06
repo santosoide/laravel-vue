@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Domain\Contracts\UserInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserEditRequest;
 use App\Domain\Entities\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * Class UserController
@@ -15,10 +17,25 @@ use Illuminate\Http\JsonResponse;
 class UserController extends Controller
 {
     /**
+     * @var UserInterface
+     */
+    protected $user;
+
+    /**
+     * UserController constructor.
+     * @param UserInterface $user
+     */
+    public function __construct(UserInterface $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @param Request $request
      * @return mixed
      */
-    public function index(){
-        return User::paginate();
+    public function index(Request $request){
+        return $this->user->paginate(10,  $columns = ['*'], 'name' ,''  );
     }
 
     /**
@@ -26,7 +43,7 @@ class UserController extends Controller
      * @return mixed
      */
     public function store(UserCreateRequest $request){
-        return User::create($request->all());
+        return $this->user->store($request->all());
     }
 
     /**
@@ -34,7 +51,7 @@ class UserController extends Controller
      * @return mixed
      */
     public function show($id){
-        return User::find($id);
+        return $this->user->find($id);
     }
 
     /**
@@ -43,25 +60,14 @@ class UserController extends Controller
      * @return mixed
      */
     public function update(UserEditRequest $request, $id){
-        $user = User::find($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
-
-        return $user;
+       return $this->user->update($id, $request->all());
     }
 
     /**
      * @param $id
-     * @return JsonResponse
+     * @return mixed
      */
     public function destroy($id){
-        $user = User::find($id);
-        $result = $user->delete();
-        if($result){
-            return response()->json(['message' =>'Data deleted!'], 200);
-        }
-
-        return response()->json(['message' =>'something wrong'], 500);
+        return $this->user->delete($id);
     }
 }

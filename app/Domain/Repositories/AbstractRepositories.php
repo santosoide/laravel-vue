@@ -136,14 +136,13 @@ abstract class AbstractRepository implements RepositoryContract
      * Get Results by Page
      *
      * @param  int $limit
-     * @param  int $page
      * @param  array $columns
      * @param  string $key
      * @param  string $value
      *
      * @return Paginator
      */
-    public function paginate($limit = 10, $page = 1, array $columns = ['*'], $key, $value = '')
+    public function paginate($limit, array $columns, $key, $value)
     {
         return $this->make()->where($key, 'like', '%' . $value . '%')->paginate($limit, $columns);
     }

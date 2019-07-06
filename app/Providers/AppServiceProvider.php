@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->registerUser();
     }
 
     /**
@@ -24,5 +24,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+    }
+
+    public function registerUser(){
+        $this->app->when('App\Http\Controllers\Api\UserController')
+            ->needs('App\Domain\Contracts\UserInterface')
+            ->give('App\Domain\Repositories\UserRepository');
     }
 }
