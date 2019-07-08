@@ -3,43 +3,24 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class User extends Authenticatable
+class Channel extends Model
 {
     use Notifiable;
-
     public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
+     * 
+     * 
      */
-
+    protected $table = 'channels';
     protected $fillable = [
-        'name', 'email', 'password',
+        'code', 'name', 'description', 'timezone', 'theme', 'hostname', 'logo', 'favicon', 'home_page_content', 'footer_content', 'default_locale_id', 'base_currency_id', 'root_category_id'
     ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
 
     protected static function boot()
     {

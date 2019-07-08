@@ -29,6 +29,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('sidebar-component', require('./components/Sidebar.vue').default);
 Vue.component('modal', require('./components/Modal.vue').default);
 
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -41,6 +42,9 @@ import Home from './components/Home'
 import UsersIndex from './components/UsersIndex'
 import UserCreate from './components/UserCreate'
 import UserEdit from './components/UserEdit'
+import Channels from './components/ChannelsIndex'
+import ChannelCreate from './components/ChannelCreate'
+import ChannelEdit from './components/ChannelEdit'
 
 const router = new VueRouter({
     mode: 'history',
@@ -69,6 +73,21 @@ const router = new VueRouter({
             path: '/users/:id/edit',
             name: 'users.edit',
             component: UserEdit,
+        },
+        {
+            path: '/channels',
+            name: 'channels.index',
+            component: Channels,
+        },
+        {
+            path: '/channels/create',
+            name: 'channels.create',
+            component: ChannelCreate,
+        },
+        {
+            path: '/channels/:id/edit',
+            name: 'channels.edit',
+            component: ChannelEdit,
         },
     ],
 });
