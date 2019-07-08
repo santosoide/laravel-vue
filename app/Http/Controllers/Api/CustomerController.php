@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Domain\Contracts\CustomerInterface;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\CustomerEditRequest;
+use App\Http\Requests\CustomerCreateRequest;
 
 class CustomerController extends Controller
 {
@@ -48,7 +49,7 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CustomerCreateRequest $request)
     {
         return $this->customer->store($request->all());
     }
@@ -82,7 +83,7 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CustomerEditRequest $request, $id)
     {
         return $this->customer->update($id, $request->all());
     }
