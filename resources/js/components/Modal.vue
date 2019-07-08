@@ -3,7 +3,7 @@
         name: 'modal',
         props: {
             method: { type: Function },
-            user: {type: Object}
+            data: {type: Object}
         },
         data() {
             return {};
@@ -13,7 +13,7 @@
                 this.$emit('close');
             },
             onDelete(){
-                this.method(this.user.id);
+                this.method(this.data.id);
             }
         }
     };

@@ -41,6 +41,9 @@ import Home from './components/Home'
 import UsersIndex from './components/UsersIndex'
 import UserCreate from './components/UserCreate'
 import UserEdit from './components/UserEdit'
+import RolesIndex from './components/RolesIndex'
+import RoleCreate from './components/RoleCreate'
+import RoleEdit from './components/RoleEdit'
 
 const router = new VueRouter({
     mode: 'history',
@@ -69,6 +72,21 @@ const router = new VueRouter({
             path: '/users/:id/edit',
             name: 'users.edit',
             component: UserEdit,
+        },
+        {
+            path: '/roles',
+            name: 'roles.index',
+            component: RolesIndex,
+        },
+        {
+            path: '/roles/create',
+            name: 'roles.create',
+            component: RoleCreate,
+        },
+        {
+            path: '/roles/:id/edit',
+            name: 'roles.edit',
+            component: RoleEdit,
         },
     ],
 });

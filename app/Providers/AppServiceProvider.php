@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,12 +24,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Schema::defaultStringLength(191);
     }
 
     public function registerUser(){
         $this->app->when('App\Http\Controllers\Api\UserController')
             ->needs('App\Domain\Contracts\UserInterface')
             ->give('App\Domain\Repositories\UserRepository');
+        $this->app->when('App\Http\Controllers\Api\RoleController')
+            ->needs('App\Domain\Contracts\RoleInterface')
+            ->give('App\Domain\Repositories\RoleRepository');
     }
 }
