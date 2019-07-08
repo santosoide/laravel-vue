@@ -73,6 +73,8 @@
                         last_name: "",
                         email: "",
                         notes: "",
+                        name: "",
+                        email: "",
                     }
                 },
                 loaded: false,
