@@ -1,23 +1,29 @@
 <?php
 
-namespace App;
+namespace App\Domain\Entities;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Webpatser\Uuid\Uuid;
 
+/**
+ * Class User
+ * @package App\Domain\Entities
+ */
 class User extends Authenticatable
 {
     use Notifiable;
 
+    /**
+     * @var bool
+     */
     public $incrementing = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-
     protected $fillable = [
         'name', 'email', 'password',
     ];
@@ -40,7 +46,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
     protected static function boot()
     {
         parent::boot();
@@ -51,8 +61,10 @@ class User extends Authenticatable
          */
         static::creating(function ($model) {
 
-            $model->{$model->getKeyName()} = (string) $model->generateNewId();
+            $model->{$model->getKeyName()} = (string)$model->generateNewId();
+
         });
+
     }
 
     /**

@@ -45,6 +45,12 @@ import UserEdit from './components/UserEdit'
 import Channels from './components/ChannelsIndex'
 import ChannelCreate from './components/ChannelCreate'
 import ChannelEdit from './components/ChannelEdit'
+import RolesIndex from './components/RolesIndex'
+import RoleCreate from './components/RoleCreate'
+import RoleEdit from './components/RoleEdit'
+import CustomersIndex from './components/CustomersIndex'
+import CustomerCreate from './components/CustomerCreate'
+import CustomerEdit from './components/CustomerEdit'
 
 const router = new VueRouter({
     mode: 'history',
@@ -89,6 +95,37 @@ const router = new VueRouter({
             name: 'channels.edit',
             component: ChannelEdit,
         },
+        {
+            path: '/roles',
+            name: 'roles.index',
+            component: RolesIndex,
+        },
+        {
+            path: '/roles/create',
+            name: 'roles.create',
+            component: RoleCreate,
+        },
+        {
+            path: '/roles/:id/edit',
+            name: 'roles.edit',
+            component: RoleEdit,
+        },
+        {
+            path: '/customers',
+            name: 'customers.index',
+            component: CustomersIndex,
+        },
+        {
+            path: '/customers/create',
+            name: 'customers.create',
+            component: CustomerCreate,
+        },
+        {
+            path: '/customers/:id/edit',
+            name: 'customers.edit',
+            component: CustomerEdit,
+        },
+
     ],
 });
 

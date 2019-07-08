@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class UsersTableSeeder extends Seeder
+class CustomersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,8 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->truncate();
-
-        factory('App\Domain\Entities\User', 100)->create();
+        DB::table('customers')->truncate();
+        factory('App\Domain\Entities\Customer', 100)->create();
     }
 }

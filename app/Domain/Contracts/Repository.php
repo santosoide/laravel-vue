@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Domain\Contracts;
-
 /**
  * Interface Repository
  * @package App\Domain\Contracts
