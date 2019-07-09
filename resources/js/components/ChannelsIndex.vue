@@ -1,63 +1,79 @@
 <template>
-  <div class="customers">
+  <div class="channels">
     <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-      <router-link class="btn btn-secondary" :to="{ name: 'customers.create' }">Create</router-link>
+      <router-link class="btn btn-secondary" :to="{ name: 'channels.create' }">Create</router-link>
     </div>
     <div v-if="error" class="error">
       <p>{{ error }}</p>
     </div>
 
-            <table class="table table-striped table-hover">
-                <thead class="thead-light">
-                <tr>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Gender</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="{ id, email, gender, first_name, last_name} in customers">
-                    <td>{{first_name}} {{last_name}}</td>
-                    <td>{{gender}}</td>
-                    <td>{{email}}</td>
-                    <td>
-                        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-                            <div class="btn-group mr-2" role="group" aria-label="First group">
-                                <router-link  class="btn btn-secondary" :to="{ name: 'customers.edit', params: { id } }">Edit</router-link>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" @click="showModal({id, email, gender, first_name, last_name})">Delete</button>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+    <div v-if="channels">
+      <table class="table table-striped table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Name</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="{ id, code, name } in channels">
+            <td>{{code}}</td>
+            <td>{{name}}</td>
+            <td>
+              <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                  <router-link
+                    class="btn btn-secondary"
+                    :to="{ name: 'channels.edit', params: { id } }"
+                  >Edit</router-link>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-toggle="modal"
+                    data-target="#exampleModal"
+                    @click="showModal({id, code, name})"
+                  >Delete</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group mr-2" role="group" aria-label="First group">
-                <button type="button" class="btn btn-secondary" :disabled="! prevPage" @click.prevent="goToPrev">Previous</button>
-                <button type="button" class="btn btn-secondary" disabled>{{ paginationCount }}</button>
-                <button type="button" class="btn btn-secondary" :disabled="! nextPage" @click.prevent="goToNext">Next</button>
-            </div>
-        </div>
-        <modal v-show="isModalVisible" :data="selectedCustomer" @close="closeModal" :method="deleteCustomer"></modal>
+    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+      <div class="btn-group mr-2" role="group" aria-label="First group">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          :disabled="! prevPage"
+          @click.prevent="goToPrev"
+        >Previous</button>
+        <button type="button" class="btn btn-secondary" disabled>{{ paginationCount }}</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          :disabled="! nextPage"
+          @click.prevent="goToNext"
+        >Next</button>
+      </div>
     </div>
     <modal
       v-show="isModalVisible"
-      :customer="selectedCustomer"
+      :data="selectedChannel"
       @close="closeModal"
-      :method="deleteCustomer"
+      :method="deleteChannel"
     ></modal>
   </div>
 </template>
 <script>
 import axios from "axios";
-import api from "../api/customers";
-const getCustomers = (page, callback) => {
+import api from "../api/channels";
+const getChannels = (page, callback) => {
   const params = { page };
   axios
-    .get("/api/customers", { params })
+    .get("/api/channels", { params })
     .then(response => {
       callback(null, response.data);
     })
@@ -70,7 +86,7 @@ export default {
     return {
       renderComponent: true,
       isModalVisible: false,
-      customers: null,
+      channels: null,
       selected: null,
       meta: {
         current_page: null,
@@ -111,20 +127,20 @@ export default {
       const { current_page, last_page } = this.meta;
       return `${current_page} of ${last_page}`;
     },
-    selectedCustomer() {
+    selectedChannel() {
       return this.selected;
     }
   },
   beforeRouteEnter(to, from, next) {
-    getCustomers(to.query.page, (err, data) => {
+    getChannels(to.query.page, (err, data) => {
       next(vm => vm.setData(err, data));
     });
   },
   // when route changes and this component is already rendered,
   // the logic will be slightly different.
   beforeRouteUpdate(to, from, next) {
-    this.customers = this.links = this.meta = null;
-    getCustomers(to.query.page, (err, data) => {
+    this.channels = this.links = this.meta = null;
+    getChannels(to.query.page, (err, data) => {
       this.setData(err, data);
       next();
     });
@@ -136,6 +152,7 @@ export default {
     showModal(data) {
       this.selected = data;
       this.isModalVisible = true;
+      console.log(data);
     },
     closeModal() {
       this.isModalVisible = false;
@@ -149,7 +166,7 @@ export default {
     },
     goToPrev() {
       this.$router.push({
-        name: "customers.index",
+        name: "channels.index",
         query: {
           page: this.prevPage
         }
@@ -157,7 +174,7 @@ export default {
     },
     goHome() {
       this.$router.push({
-        name: "customers.index",
+        name: "channels.index",
         query: {
           page: 1
         }
@@ -168,7 +185,7 @@ export default {
         this.error = err.toString();
       } else {
         console.log(data);
-        this.customers = data.data;
+        this.channels = data.data;
         this.links = {
           first: data.first_page_url,
           next: data.next_page_url,
@@ -184,14 +201,14 @@ export default {
         };
       }
     },
-    deleteCustomer(id) {
+    deleteChannel(id) {
       api.delete(id).then(response => {
         if (response) {
           this.selected = null;
           setTimeout(
             () =>
               this.$router.push({
-                name: "customers.index",
+                name: "channels.index",
                 query: {
                   page: 1
                 }

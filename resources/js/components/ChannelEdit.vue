@@ -1,16 +1,16 @@
 <template>
   <div>
-    <nav aria-label="breadcrumb">
+    <router-link aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <router-link :to="{ name: 'home' }">Home</router-link>
         </li>
         <li class="breadcrumb-item" aria-current="page">
-          <router-link :to="{ name: 'users.index' }">List Users</router-link>
+          <router-link :to="{ name: 'channels.index' }">List Users</router-link>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">Create User</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
       </ol>
-    </nav>
+    </router-link>
     <form @submit.prevent="onSubmit($event)">
       <div class="form-group row">
         <label for="inputName" class="col-sm-2 col-form-label">Name</label>
@@ -39,19 +39,6 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-        <div class="col-sm-10">
-          <input
-            type="password"
-            class="form-control"
-            id="inputPassword3"
-            v-model="user.password"
-            placeholder="Password"
-          />
-          <span v-if="user.error" class="text-danger">{{ messages.errors.password }}</span>
-        </div>
-      </div>
-      <div class="form-group row">
         <div class="col-sm-10">
           <button type="submit" class="btn btn-primary">Submit</button>
           <button type="reset" class="btn btn-light">Reset</button>
@@ -61,22 +48,21 @@
   </div>
 </template>
 <script>
-import api from "../api/users";
+import api from "../api/channels";
 
 export default {
   data() {
     return {
       user: {
+        id: null,
         name: "",
         email: "",
-        password: "",
         error: false
       },
       messages: {
         errors: {
           name: "",
-          email: "",
-          password: ""
+          email: ""
         }
       },
       loaded: false,
@@ -87,14 +73,13 @@ export default {
   methods: {
     onSubmit(event) {
       api
-        .create(this.user)
+        .update(this.user.id, this.user)
         .then(response => {
           if (response.data) {
             this.$router.push({
-              name: "users.index"
+              name: "channels.index"
             });
           }
-          console.log(response);
         })
         .catch(error => {
           console.log(error.response.data);
@@ -103,6 +88,13 @@ export default {
         });
     }
   },
-  created() {}
+  created() {
+    api.find(this.$route.params.id).then(response => {
+      setTimeout(() => {
+        this.loaded = true;
+        this.user = response.data;
+      }, 500);
+    });
+  }
 };
 </script>
