@@ -45,12 +45,9 @@ final class CustomerRepository extends AbstractRepository implements CustomerInt
         return parent::create([
             'first_name'    => e($data['first_name']),
             'last_name'     => e($data['last_name']),
-            'gender'        => e($data['gender']),
-            'date_of_birth' => e($data['date_of_birth']),
             'email'         => e($data['email']),
             'password'      => bcrypt($data['password']),
             'notes'         => e($data['notes']),
-            'phone'         => e($data['phone']),
         ]);
     }
 

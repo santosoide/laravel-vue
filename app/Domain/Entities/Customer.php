@@ -4,14 +4,11 @@ namespace App\Domain\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Webpatser\Uuid\Uuid;
 
 class Customer extends Model
 {
     use Notifiable;
-
     public $incrementing = false;
     /**
      * The attributes that are mass assignable.
@@ -20,7 +17,7 @@ class Customer extends Model
      */
 
     protected $fillable = [
-        'first_name', 'last_name', 'gender', 'date_of_birth', 'email', 'status', 'notes', 'phone'
+        'first_name', 'last_name', 'password', 'email', 'status', 'notes'
     ];
 
     /**
@@ -38,11 +35,23 @@ class Customer extends Model
      * @var array
      */
     protected $casts = [
-        
+
         'email_verified_at' => 'datetime',
+    ];
+    protected $attributes = [
+        'channel_id'                => 0,
+        'status'                    => 0,
+        'subscribed_to_news_letter' => 0,
+        'is_verified'               => 0,
+        'gender'                    => 'man',
     ];
 
 
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
     protected static function boot()
     {
         parent::boot();
@@ -53,10 +62,11 @@ class Customer extends Model
          */
         static::creating(function ($model) {
 
-            $model->{$model->getKeyName()} = (string) $model->generateNewId();
-        });
-    }
+            $model->{$model->getKeyName()} = (string)$model->generateNewId();
 
+        });
+
+    }
     /**
      * Generate new Uuid
      *
