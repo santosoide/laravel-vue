@@ -1,38 +1,38 @@
 <template>
-  <div class="roles">
+  <div class="channels">
     <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-      <router-link class="btn btn-secondary" :to="{ name: 'roles.create' }">Create</router-link>
+      <router-link class="btn btn-secondary" :to="{ name: 'channels.create' }">Create</router-link>
     </div>
     <div v-if="error" class="error">
       <p>{{ error }}</p>
     </div>
 
-    <div v-if="roles">
+    <div v-if="channels">
       <table class="table table-striped table-hover">
         <thead class="thead-light">
           <tr>
+            <th scope="col">Code</th>
             <th scope="col">Name</th>
-            <th scope="col">Permission</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="{ id, name, permission_type } in roles">
+          <tr v-for="{ id, code, name } in channels">
+            <td>{{code}}</td>
             <td>{{name}}</td>
-            <td>{{permission_type}}</td>
             <td>
               <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-2" role="group" aria-label="First group">
                   <router-link
                     class="btn btn-secondary"
-                    :to="{ name: 'roles.edit', params: { id } }"
+                    :to="{ name: 'channels.edit', params: { id } }"
                   >Edit</router-link>
                   <button
                     type="button"
                     class="btn btn-danger"
                     data-toggle="modal"
                     data-target="#exampleModal"
-                    @click="showModal({id, name, permission_type})"
+                    @click="showModal({id, code, name})"
                   >Delete</button>
                 </div>
               </div>
@@ -59,16 +59,21 @@
         >Next</button>
       </div>
     </div>
-    <modal v-show="isModalVisible" :data="selectedRole" @close="closeModal" :method="deleteRole"></modal>
+    <modal
+      v-show="isModalVisible"
+      :data="selectedChannel"
+      @close="closeModal"
+      :method="deleteChannel"
+    ></modal>
   </div>
 </template>
 <script>
 import axios from "axios";
-import api from "../api/roles";
-const getRoles = (page, callback) => {
+import api from "../api/channels";
+const getChannels = (page, callback) => {
   const params = { page };
   axios
-    .get("/api/roles", { params })
+    .get("/api/channels", { params })
     .then(response => {
       callback(null, response.data);
     })
@@ -81,7 +86,7 @@ export default {
     return {
       renderComponent: true,
       isModalVisible: false,
-      roles: null,
+      channels: null,
       selected: null,
       meta: {
         current_page: null,
@@ -122,20 +127,20 @@ export default {
       const { current_page, last_page } = this.meta;
       return `${current_page} of ${last_page}`;
     },
-    selectedRole() {
+    selectedChannel() {
       return this.selected;
     }
   },
   beforeRouteEnter(to, from, next) {
-    getRoles(to.query.page, (err, data) => {
+    getChannels(to.query.page, (err, data) => {
       next(vm => vm.setData(err, data));
     });
   },
   // when route changes and this component is already rendered,
   // the logic will be slightly different.
   beforeRouteUpdate(to, from, next) {
-    this.roles = this.links = this.meta = null;
-    getRoles(to.query.page, (err, data) => {
+    this.channels = this.links = this.meta = null;
+    getChannels(to.query.page, (err, data) => {
       this.setData(err, data);
       next();
     });
@@ -147,6 +152,7 @@ export default {
     showModal(data) {
       this.selected = data;
       this.isModalVisible = true;
+      console.log(data);
     },
     closeModal() {
       this.isModalVisible = false;
@@ -160,7 +166,7 @@ export default {
     },
     goToPrev() {
       this.$router.push({
-        name: "roles.index",
+        name: "channels.index",
         query: {
           page: this.prevPage
         }
@@ -168,7 +174,7 @@ export default {
     },
     goHome() {
       this.$router.push({
-        name: "roles.index",
+        name: "channels.index",
         query: {
           page: 1
         }
@@ -178,7 +184,8 @@ export default {
       if (err) {
         this.error = err.toString();
       } else {
-        this.roles = data.data;
+        console.log(data);
+        this.channels = data.data;
         this.links = {
           first: data.first_page_url,
           next: data.next_page_url,
@@ -194,14 +201,14 @@ export default {
         };
       }
     },
-    deleteRole(id) {
+    deleteChannel(id) {
       api.delete(id).then(response => {
         if (response) {
           this.selected = null;
           setTimeout(
             () =>
               this.$router.push({
-                name: "roles.index",
+                name: "channels.index",
                 query: {
                   page: 1
                 }
