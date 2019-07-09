@@ -107,5 +107,37 @@
                 }, 500);
             });
         }
+      },
+      loaded: false,
+      saving: false
+    };
+  },
+  computed: {},
+  methods: {
+    onSubmit(event) {
+      api
+        .update(this.user.id, this.user)
+        .then(response => {
+          if (response.data) {
+            this.$router.push({
+              name: "users.index"
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error.response.data);
+          this.user.error = true;
+          this.messages.errors = error.response.data.errors;
+        });
     }
+  },
+  created() {
+    api.find(this.$route.params.id).then(response => {
+      setTimeout(() => {
+        this.loaded = true;
+        this.user = response.data;
+      }, 500);
+    });
+  }
+};
 </script>

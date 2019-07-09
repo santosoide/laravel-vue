@@ -10,12 +10,12 @@ class Customer extends Model
 {
     use Notifiable;
     public $incrementing = false;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+
     protected $fillable = [
         'first_name', 'last_name', 'password', 'email', 'status', 'notes'
     ];
@@ -77,7 +77,4 @@ class Customer extends Model
     {
         return Uuid::generate(4);
     }
-
-
-
 }

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Domain\Repositories;
+
 use App\Domain\Contracts\Repository as RepositoryContract;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
