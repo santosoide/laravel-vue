@@ -1,12 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Domain\Entities;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class Customer extends Model
 {
     use Notifiable;
 
@@ -16,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name', 'last_name', 'gender', 'date_of_birth', 'email', 'status', 'notes', 'phone'
     ];
 
     /**
@@ -34,6 +33,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
+        
         'email_verified_at' => 'datetime',
     ];
 }

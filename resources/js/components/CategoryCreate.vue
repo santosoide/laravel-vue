@@ -4,25 +4,25 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><router-link :to="{ name: 'home' }">Home</router-link></li>
                 <li class="breadcrumb-item" aria-current="page"><router-link :to="{ name: 'categories.index' }">List Categories</router-link></li>
-                <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                <li class="breadcrumb-item active" aria-current="page">Create Categories</li>
             </ol>
         </nav>
         <form @submit.prevent="onSubmit($event)">
             <div class="form-group row">
-                <label for="inputName" class="col-sm-2 col-form-label">Name</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputName" v-model="category.name" placeholder="Name">
+                <label for="inputPosition" class="col-sm-3 col-form-label">Position</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="inputPosition" v-model="category.position" placeholder="Position">
                     <span v-if="category.error" class="text-danger">
-                        {{ messages.errors.name }}
+                        {{ messages.errors.position }}
                     </span>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
-                    <input type="email" class="form-control" id="inputEmail3" v-model="category.email" placeholder="Email">
+                <label for="inputImage" class="col-sm-3 col-form-label">Image</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="inputImage" v-model="category.image" placeholder="Image">
                     <span v-if="category.error" class="text-danger">
-                        {{ messages.errors.email }}
+                        {{ messages.errors.image }}
                     </span>
                 </div>
             </div>
@@ -37,19 +37,19 @@
 </template>
 <script>
     import api from '../api/categories';
+
     export default {
         data() {
             return {
                 category:{
-                    id: null,
-                    name: "",
-                    email: "",
+                    position: "",
+                    image: "",
                     error: false
                 },
                 messages: {
                     errors : {
-                        name: "",
-                        email: "",
+                        position: "",
+                        image: "",
                     }
                 },
                 loaded: false,
@@ -57,15 +57,17 @@
             }
         },
         computed: {
+
         },
         methods: {
             onSubmit (event) {
-                api.update(this.category.id, this.category).then((response) => {
+                api.create(this.category).then((response) => {
                     if(response.data) {
                         this.$router.push({
                             name: 'categories.index'
                         });
                     }
+                    console.log(response);
                 }).catch(error => {
                     console.log(error.response.data);
                     this.category.error = true;
@@ -74,12 +76,7 @@
             }
         },
         created () {
-            api.find(this.$route.params.id).then((response) => {
-                setTimeout(() => {
-                    this.loaded = true;
-                    this.category = response.data;
-                }, 500);
-            });
+
         }
     }
-</script> 
+</script>

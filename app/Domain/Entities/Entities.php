@@ -1,36 +1,22 @@
 <?php
-
 namespace App\Domain\Entities;
-
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Category extends Model
-{
 /**
+ * Class Entities
+ * @package App\Domain\Entities
+ */
+class Entities extends Model
+{
+    /**
      * @var bool
      */
     public $incrementing = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'position', 'image', 'status', '_lft', '_rgt', 'parent_id', 'display_mode',
-    ];
-
-    protected $attributes = [
-        'position' => 'position',
-        'image' => 'image',
-        'status' => 12345,
-        '_lft' => '_lft',
-        '_rgt' => '_rgt',
-        'parent_id' => 'parent_id',
-        'display_mode' => 'display_mode'
-    ];
-    
     /**
      * The "booting" method of the model.
      *
@@ -45,21 +31,39 @@ class Category extends Model
          * for the `id` field (provided by $model->getKeyName())
          */
         static::creating(function ($model) {
-
+            // generate id
             $model->{$model->getKeyName()} = (string)$model->generateNewId();
+
+            // created_at
+            $model->created_at = $model->dateNow();
 
         });
 
+        static::updating(function ($model) {
+            // updated_at
+            $model->updated_at = $model->dateNow();
+        });
     }
 
     /**
      * Generate new Uuid
      *
-     * @return \Webpatser\Uuid\Uuid
-     * @throws \Exception
+     * @return Uuid
+     * @throws Exception
      */
     public function generateNewId()
     {
         return Uuid::generate(4);
     }
+
+    /**
+     * Get Date now by Carbon
+     *
+     * @return Carbon|CarbonInterface
+     */
+    public function dateNow()
+    {
+        return Carbon::now();
+    }
+
 }

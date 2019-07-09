@@ -2,12 +2,19 @@
 
 namespace App\Domain\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Webpatser\Uuid\Uuid;
 
-class Category extends Model
-{
 /**
+ * Class User
+ * @package App\Domain\Entities
+ */
+class User extends Authenticatable
+{
+    use Notifiable;
+
+    /**
      * @var bool
      */
     public $incrementing = false;
@@ -18,19 +25,27 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'position', 'image', 'status', '_lft', '_rgt', 'parent_id', 'display_mode',
+        'name', 'email', 'password',
     ];
 
-    protected $attributes = [
-        'position' => 'position',
-        'image' => 'image',
-        'status' => 12345,
-        '_lft' => '_lft',
-        '_rgt' => '_rgt',
-        'parent_id' => 'parent_id',
-        'display_mode' => 'display_mode'
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
     ];
-    
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
     /**
      * The "booting" method of the model.
      *

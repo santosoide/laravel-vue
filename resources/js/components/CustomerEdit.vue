@@ -3,26 +3,26 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><router-link :to="{ name: 'home' }">Home</router-link></li>
-                <li class="breadcrumb-item" aria-current="page"><router-link :to="{ name: 'categories.index' }">List Categories</router-link></li>
+                <li class="breadcrumb-item" aria-current="page"><router-link :to="{ name: 'users.index' }">List Users</router-link></li>
                 <li class="breadcrumb-item active" aria-current="page">Edit</li>
             </ol>
         </nav>
         <form @submit.prevent="onSubmit($event)">
             <div class="form-group row">
-                <label for="inputPosition" class="col-sm-3 col-form-label">Position</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputPosition" v-model="category.position" placeholder="Position">
-                    <span v-if="category.error" class="text-danger">
-                        {{ messages.errors.position }}
+                <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputName" v-model="user.name" placeholder="Name">
+                    <span v-if="user.error" class="text-danger">
+                        {{ messages.errors.name }}
                     </span>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputImage" class="col-sm-3 col-form-label">Image</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputImage" v-model="category.image" placeholder="Image">
-                    <span v-if="category.error" class="text-danger">
-                        {{ messages.errors.image }}
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" id="inputEmail3" v-model="user.email" placeholder="Email">
+                    <span v-if="user.error" class="text-danger">
+                        {{ messages.errors.email }}
                     </span>
                 </div>
             </div>
@@ -36,21 +36,21 @@
     </div>
 </template>
 <script>
-    import api from '../api/categories';
+    import api from '../api/users';
 
     export default {
         data() {
             return {
-                category:{
+                user:{
                     id: null,
-                    position: "",
-                    image: "",
+                    name: "",
+                    email: "",
                     error: false
                 },
                 messages: {
                     errors : {
-                        position: "",
-                        image: "",
+                        name: "",
+                        email: "",
                     }
                 },
                 loaded: false,
@@ -62,15 +62,15 @@
         },
         methods: {
             onSubmit (event) {
-                api.update(this.category.id, this.category).then((response) => {
+                api.update(this.user.id, this.user).then((response) => {
                     if(response.data) {
                         this.$router.push({
-                            name: 'categories.index'
+                            name: 'users.index'
                         });
                     }
                 }).catch(error => {
                     console.log(error.response.data);
-                    this.category.error = true;
+                    this.user.error = true;
                     this.messages.errors = error.response.data.errors;
                 });
             }
@@ -79,7 +79,7 @@
             api.find(this.$route.params.id).then((response) => {
                 setTimeout(() => {
                     this.loaded = true;
-                    this.category = response.data;
+                    this.user = response.data;
                 }, 500);
             });
         }

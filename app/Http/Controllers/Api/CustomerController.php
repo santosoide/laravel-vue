@@ -1,37 +1,37 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
-use App\Domain\Contracts\CategoryInterface;
+use App\Domain\Contracts\CustomerInterface;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryCreateRequest;
-use App\Http\Requests\CategoryEditRequest;
-use App\Domain\Entities\Category;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class CustomerController extends Controller
 {
+
     /**
-     * @var CategoryInterface
+     * @var CustomerInterface
      */
-    protected $category;
+    protected $customer;
+
     /**
-     * CategoryController constructor.
-     * @param CategoryInterface $category
-    */
-    public function __construct(CategoryInterface $category)
+     * CustomerController constructor.
+     * @param CustomerInterface $customer
+     */
+    public function __construct(CustomerInterface $customer)
     {
-        $this->category = $category;
+        $this->customer = $customer;
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        return $this->category->paginate(10,  $columns = ['*'], 'position' ,''  );
+        return $this->customer->paginate(10,  $columns = ['*'], 'email' ,''  );
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -41,16 +41,18 @@ class CategoryController extends Controller
     {
         //
     }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryCreateRequest $request)
+    public function store(Request $request)
     {
-        return $this->category->store($request->all());
+        return $this->customer->store($request->all());
     }
+
     /**
      * Display the specified resource.
      *
@@ -59,8 +61,9 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        return $this->category->find($id);
+        return $this->customer->find($id);
     }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -71,6 +74,7 @@ class CategoryController extends Controller
     {
         //
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -78,10 +82,11 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryEditRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        return $this->category->update($id, $request->all());
+        return $this->customer->update($id, $request->all());
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -90,6 +95,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        return $this->category->delete($id);
+        return $this->customer->delete($id);
     }
 }

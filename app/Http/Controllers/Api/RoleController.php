@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Domain\Contracts\UserInterface;
+use App\Domain\Contracts\RoleInterface;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserCreateRequest;
-use App\Http\Requests\UserEditRequest;
-use App\Domain\Entities\User;
+use App\Http\Requests\RoleCreateRequest;
+use App\Http\Requests\RoleEditRequest;
+use App\Domain\Entities\Role;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,20 +14,20 @@ use Illuminate\Http\Request;
  * Class UserController
  * @package App\Http\Controllers\Api
  */
-class UserController extends Controller
+class RoleController extends Controller
 {
     /**
-     * @var UserInterface
+     * @var RoleInterface
      */
-    protected $user;
+    protected $role;
 
     /**
      * UserController constructor.
      * @param UserInterface $user
      */
-    public function __construct(UserInterface $user)
+    public function __construct(RoleInterface $role)
     {
-        $this->user = $user;
+        $this->role = $role;
     }
 
     /**
@@ -35,15 +35,15 @@ class UserController extends Controller
      * @return mixed
      */
     public function index(Request $request){
-        return $this->user->paginate(10,  $columns = ['*'], 'name' ,''  );
+        return $this->role->paginate(10,  $columns = ['*'], 'name' ,''  );
     }
 
     /**
      * @param UserCreateRequest $request
      * @return mixed
      */
-    public function store(UserCreateRequest $request){
-        return $this->user->store($request->all());
+    public function store(RoleCreateRequest $request){
+        return $this->role->store($request->all());
     }
 
     /**
@@ -51,7 +51,7 @@ class UserController extends Controller
      * @return mixed
      */
     public function show($id){
-        return $this->user->find($id);
+        return $this->role->find($id);
     }
 
     /**
@@ -59,8 +59,8 @@ class UserController extends Controller
      * @param $id
      * @return mixed
      */
-    public function update(UserEditRequest $request, $id){
-       return $this->user->update($id, $request->all());
+    public function update(RoleEditRequest $request, $id){
+       return $this->role->update($id, $request->all());
     }
 
     /**
@@ -68,6 +68,6 @@ class UserController extends Controller
      * @return mixed
      */
     public function destroy($id){
-        return $this->user->delete($id);
+        return $this->role->delete($id);
     }
 }

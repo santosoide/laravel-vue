@@ -14,6 +14,6 @@ class CategoriesTableSeeder extends Seeder
     {
         DB::table('categories')->truncate();
 
-        factory('App\Category', 100)->create();
+        factory('App\Domain\Entities\Category', 100)->create();
     }
 }

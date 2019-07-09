@@ -1,10 +1,10 @@
 <?php
 
-use App\Category;
+use App\Domain\Entities\Category;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
-$factory->define(App\Category::class, function (Faker $faker) {
+$factory->define(App\Domain\Entities\Category::class, function (Faker $faker) {
     return [
         'id' => $faker->uuid,
         'position' => $faker->numberBetween(2),

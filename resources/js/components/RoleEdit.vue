@@ -3,26 +3,26 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><router-link :to="{ name: 'home' }">Home</router-link></li>
-                <li class="breadcrumb-item" aria-current="page"><router-link :to="{ name: 'categories.index' }">List Categories</router-link></li>
+                <li class="breadcrumb-item" aria-current="page"><router-link :to="{ name: 'roles.index' }">List Roles</router-link></li>
                 <li class="breadcrumb-item active" aria-current="page">Edit</li>
             </ol>
         </nav>
         <form @submit.prevent="onSubmit($event)">
             <div class="form-group row">
-                <label for="inputPosition" class="col-sm-3 col-form-label">Position</label>
+                <label for="inputName" class="col-sm-3 col-form-label">Name</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputPosition" v-model="category.position" placeholder="Position">
-                    <span v-if="category.error" class="text-danger">
-                        {{ messages.errors.position }}
+                    <input type="text" class="form-control" id="inputName" v-model="role.name" placeholder="Name">
+                    <span v-if="role.error" class="text-danger">
+                        {{ messages.errors.name }}
                     </span>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputImage" class="col-sm-3 col-form-label">Image</label>
+                <label for="inputPermission" class="col-sm-3 col-form-label">Permission</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputImage" v-model="category.image" placeholder="Image">
-                    <span v-if="category.error" class="text-danger">
-                        {{ messages.errors.image }}
+                    <input type="text" class="form-control" id="inputPermission" v-model="role.permission_type" placeholder="Permission">
+                    <span v-if="role.error" class="text-danger">
+                        {{ messages.errors.permission_type }}
                     </span>
                 </div>
             </div>
@@ -36,21 +36,21 @@
     </div>
 </template>
 <script>
-    import api from '../api/categories';
+    import api from '../api/roles';
 
     export default {
         data() {
             return {
-                category:{
+                role:{
                     id: null,
-                    position: "",
-                    image: "",
+                    name: "",
+                    permission_type: "",
                     error: false
                 },
                 messages: {
                     errors : {
-                        position: "",
-                        image: "",
+                        name: "",
+                        permission_type: "",
                     }
                 },
                 loaded: false,
@@ -62,15 +62,15 @@
         },
         methods: {
             onSubmit (event) {
-                api.update(this.category.id, this.category).then((response) => {
+                api.update(this.role.id, this.role).then((response) => {
                     if(response.data) {
                         this.$router.push({
-                            name: 'categories.index'
+                            name: 'roles.index'
                         });
                     }
                 }).catch(error => {
                     console.log(error.response.data);
-                    this.category.error = true;
+                    this.role.error = true;
                     this.messages.errors = error.response.data.errors;
                 });
             }
@@ -79,7 +79,7 @@
             api.find(this.$route.params.id).then((response) => {
                 setTimeout(() => {
                     this.loaded = true;
-                    this.category = response.data;
+                    this.role = response.data;
                 }, 500);
             });
         }

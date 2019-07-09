@@ -5,9 +5,9 @@ namespace App\Domain\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Category extends Model
+class Role extends Model
 {
-/**
+    /**
      * @var bool
      */
     public $incrementing = false;
@@ -18,19 +18,9 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'position', 'image', 'status', '_lft', '_rgt', 'parent_id', 'display_mode',
+        'name', 'permission_type',
     ];
 
-    protected $attributes = [
-        'position' => 'position',
-        'image' => 'image',
-        'status' => 12345,
-        '_lft' => '_lft',
-        '_rgt' => '_rgt',
-        'parent_id' => 'parent_id',
-        'display_mode' => 'display_mode'
-    ];
-    
     /**
      * The "booting" method of the model.
      *

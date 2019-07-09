@@ -1,23 +1,28 @@
-<?php 
+<?php
+
 
 namespace App\Domain\Repositories;
 
-use App\Domain\Contracts\CategoryInterface;
-use App\Domain\Entities\Category;
+
+use App\Domain\Contracts\UserInterface;
+use App\Domain\Entities\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
- * Class CategoryRepository
+ * Class UserRepository
  * @package App\Domain\Repositories
  */
-final class CategoryRepository extends AbstractRepository implements CategoryInterface
+final class UserRepository extends AbstractRepository implements UserInterface
 {
     protected $model;
-    public function __construct(Category $category)
+
+    public function __construct(User $user)
     {
-        $this->model = $category;
+        $this->model = $user;
     }
+
     /**
      * @param int $limit
      * @param array $columns
@@ -29,6 +34,7 @@ final class CategoryRepository extends AbstractRepository implements CategoryInt
     {
         return parent::paginate($limit, $columns, $key, $value);
     }
+
     /**
      * @param array $data
      * @return mixed|Response
@@ -36,10 +42,12 @@ final class CategoryRepository extends AbstractRepository implements CategoryInt
     public function store(array $data)
     {
         return parent::create([
-            'position'    => e($data['position']),
-            'image'     => e($data['image']),
+            'name'     => e($data['name']),
+            'email'    => e($data['email']),
+            'password' => e($data['password']),
         ]);
     }
+
     /**
      * @param $id
      * @param array $data
@@ -49,6 +57,7 @@ final class CategoryRepository extends AbstractRepository implements CategoryInt
     {
         return parent::update($id, $data);
     }
+
     /**
      * @param int $id
      * @param array $columns
@@ -58,6 +67,7 @@ final class CategoryRepository extends AbstractRepository implements CategoryInt
     {
         return parent::find($id, $columns);
     }
+
     /**
      * @param $id
      * @return mixed|Response
@@ -67,4 +77,5 @@ final class CategoryRepository extends AbstractRepository implements CategoryInt
     {
         return parent::delete($id);
     }
+
 }

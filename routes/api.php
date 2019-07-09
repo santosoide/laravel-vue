@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('users', 'Api\UserController')->except(['create', 'edit']);
 Route::resource('categories', 'Api\CategoryController')->except(['create', 'edit']);
+Route::resource('roles', 'Api\RoleController')->except(['create', 'edit']);
+Route::resource('customers', 'Api\CustomerController')->except(['create', 'edit']);
