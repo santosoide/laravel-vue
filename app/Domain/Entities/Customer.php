@@ -43,7 +43,7 @@ class Customer extends Model
         'status'                    => 0,
         'subscribed_to_news_letter' => 0,
         'is_verified'               => 0,
-        'gender'                    => 'man',
+        'gender'                    => null,
     ];
 
 
