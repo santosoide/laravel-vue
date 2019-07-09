@@ -13,7 +13,7 @@
                 this.$emit('close');
             },
             onDelete(){
-                this.method(this.data.id);
+               this.method(this.data.id);
             }
         }
     };

@@ -1,41 +1,31 @@
 <template>
-  <div class="customers">
+  <div class="Subscribers">
     <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-      <router-link class="btn btn-secondary" :to="{ name: 'customers.create' }">Create</router-link>
+      <router-link class="btn btn-secondary" :to="{ name: 'Subscriber.create' }">Create</router-link>
     </div>
     <div v-if="error" class="error">
       <p>{{ error }}</p>
     </div>
 
-    <div v-if="customers">
+    <div v-if="Subscribers">
       <table class="table table-striped table-hover">
         <thead class="thead-light">
           <tr>
             <th scope="col">Email</th>
-            <th scope="col">Gender</th>
-            <th scope="col">Phone</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="{ id, email, gender, phone } in customers">
+          <tr v-for="{ id, email } in Subscribers">
             <td>{{email}}</td>
-            <td>{{gender}}</td>
-            <td>{{phone}}</td>
             <td>
               <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-2" role="group" aria-label="First group">
                   <router-link
                     class="btn btn-secondary"
-                    :to="{ name: 'customers.edit', params: { id } }"
+                    :to="{ name: 'Subscriber.edit', params: { id } }"
                   >Edit</router-link>
-                  <button
-                    type="button"
-                    class="btn btn-danger"
-                    data-toggle="modal"
-                    data-target="#exampleModal"
-                    @click="showModal({id, email, gender, phone})"
-                  >Delete</button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" @click="showModal({id, email})">Delete</button>
                 </div>
               </div>
             </td>
@@ -63,19 +53,19 @@
     </div>
     <modal
       v-show="isModalVisible"
-      :customer="selectedCustomer"
+      :data="selectedSubscriber"
       @close="closeModal"
-      :method="deleteCustomer"
+      :method="deleteSubscribers"
     ></modal>
   </div>
 </template>
 <script>
 import axios from "axios";
-import api from "../api/customers";
-const getCustomers = (page, callback) => {
+import api from "../api/subscribers";
+const getSubscribers = (page, callback) => {
   const params = { page };
   axios
-    .get("/api/customers", { params })
+    .get("/api/subscribers")
     .then(response => {
       callback(null, response.data);
     })
@@ -88,7 +78,7 @@ export default {
     return {
       renderComponent: true,
       isModalVisible: false,
-      customers: null,
+      Subscribers: null,
       selected: null,
       meta: {
         current_page: null,
@@ -129,20 +119,20 @@ export default {
       const { current_page, last_page } = this.meta;
       return `${current_page} of ${last_page}`;
     },
-    selectedCustomer() {
+    selectedSubscriber() {
       return this.selected;
     }
   },
   beforeRouteEnter(to, from, next) {
-    getCustomers(to.query.page, (err, data) => {
+    getSubscribers(to.query.page, (err, data) => {
       next(vm => vm.setData(err, data));
     });
   },
   // when route changes and this component is already rendered,
   // the logic will be slightly different.
   beforeRouteUpdate(to, from, next) {
-    this.customers = this.links = this.meta = null;
-    getCustomers(to.query.page, (err, data) => {
+    this.Subscribers = this.links = this.meta = null;
+    getSubscribers(to.query.page, (err, data) => {
       this.setData(err, data);
       next();
     });
@@ -167,7 +157,7 @@ export default {
     },
     goToPrev() {
       this.$router.push({
-        name: "customers.index",
+        name: "Subscribers.index",
         query: {
           page: this.prevPage
         }
@@ -175,7 +165,7 @@ export default {
     },
     goHome() {
       this.$router.push({
-        name: "customers.index",
+        name: "Subscribers.index",
         query: {
           page: 1
         }
@@ -185,8 +175,7 @@ export default {
       if (err) {
         this.error = err.toString();
       } else {
-        console.log(data);
-        this.customers = data.data;
+        this.Subscribers = data.data;
         this.links = {
           first: data.first_page_url,
           next: data.next_page_url,
@@ -202,14 +191,14 @@ export default {
         };
       }
     },
-    deleteCustomer(id) {
+    deleteSubscribers(id) {
       api.delete(id).then(response => {
         if (response) {
           this.selected = null;
           setTimeout(
             () =>
               this.$router.push({
-                name: "customers.index",
+                name: "subscribers.index",
                 query: {
                   page: 1
                 }
