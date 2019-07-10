@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerUser();
+        $this->registerCategory();
         $this->registerChannel();
         $this->registerCustomer();
         $this->registerRole();
@@ -50,5 +51,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->when('App\Http\Controllers\Api\RoleController')
             ->needs('App\Domain\Contracts\RoleInterface')
             ->give('App\Domain\Repositories\RoleRepository');
+    }
+    public function registerCategory(){
+        $this->app->when('App\Http\Controllers\Api\CategoryController')
+            ->needs('App\Domain\Contracts\CategoryInterface')
+            ->give('App\Domain\Repositories\CategoryRepository');
     }
 }

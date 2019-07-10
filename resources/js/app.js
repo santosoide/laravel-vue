@@ -52,6 +52,10 @@ import CustomersIndex from './components/CustomersIndex'
 import CustomerCreate from './components/CustomerCreate'
 import CustomerEdit from './components/CustomerEdit'
 
+import CategoriesIndex from './components/CategoriesIndex'
+import CategoryCreate from './components/CategoryCreate'
+import CategoryEdit from './components/CategoryEdit'
+
 const router = new VueRouter({
     mode: 'history',
     routes: [
@@ -79,6 +83,21 @@ const router = new VueRouter({
             path: '/users/:id/edit',
             name: 'users.edit',
             component: UserEdit,
+        },
+        {
+            path: '/categories',
+            name: 'categories.index',
+            component: CategoriesIndex,
+        },
+        {
+            path: '/categories/create',
+            name: 'categories.create',
+            component: CategoryCreate,
+        },
+        {
+            path: '/categories/:id/edit',
+            name: 'categories.edit',
+            component: CategoryEdit,
         },
         {
             path: '/channels',
