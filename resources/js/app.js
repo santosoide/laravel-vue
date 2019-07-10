@@ -98,6 +98,8 @@ const router = new VueRouter({
             path: '/categories/:id/edit',
             name: 'categories.edit',
             component: CategoryEdit,
+        },
+        {
             path: '/channels',
             name: 'channels.index',
             component: Channels,

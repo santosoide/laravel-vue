@@ -6,5 +6,6 @@
         <router-link class="list-group-item list-group-item-action" :to="{ name: 'categories.index' }">Categories</router-link>    
         <router-link class="list-group-item list-group-item-action" :to="{ name: 'roles.index' }">Roles</router-link>
         <router-link class="list-group-item list-group-item-action" :to="{ name: 'customers.index' }">Customers</router-link>
+        <router-link class="list-group-item list-group-item-action" :to="{ name: 'channels.index' }">Channels</router-link>
     </div>
 </template>
