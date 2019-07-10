@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerUser();
+        $this->registerChannel();
         $this->registerCustomer();
         $this->registerRole();
         $this->registerSubscriber();
@@ -36,8 +37,13 @@ class AppServiceProvider extends ServiceProvider
             ->needs('App\Domain\Contracts\UserInterface')
             ->give('App\Domain\Repositories\UserRepository');
     }
-    public function registerCustomer()
+    public function registerChannel()
     {
+        $this->app->when('App\Http\Controllers\Api\ChannelController')
+            ->needs('App\Domain\Contracts\ChannelInterface')
+            ->give('App\Domain\Repositories\ChannelRepository');
+    }
+    public function registerCustomer(){
         $this->app->when('App\Http\Controllers\Api\CustomerController')
             ->needs('App\Domain\Contracts\CustomerInterface')
             ->give('App\Domain\Repositories\CustomerRepository');

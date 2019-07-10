@@ -4,9 +4,9 @@
 namespace App\Domain\Repositories;
 
 
-use App\Domain\Contracts\CustomerInterface;
+use App\Domain\Contracts\ChannelInterface;
 use App\Domain\Contracts\UserInterface;
-use App\Domain\Entities\Customer;
+use App\Domain\Entities\Channel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,13 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
  * Class CustomerRepository
  * @package App\Domain\Repositories
  */
-final class CustomerRepository extends AbstractRepository implements CustomerInterface
+final class ChannelRepository extends AbstractRepository implements ChannelInterface
 {
     protected $model;
 
-    public function __construct(Customer $customer)
+    public function __construct(Channel $channel)
     {
-        $this->model = $customer;
+        $this->model = $channel;
     }
 
     /**
@@ -31,7 +31,7 @@ final class CustomerRepository extends AbstractRepository implements CustomerInt
      * @param string $value
      * @return Paginator|mixed
      */
-    public function paginate($limit, array $columns , $key, $value)
+    public function paginate($limit, array $columns, $key, $value)
     {
         return parent::paginate($limit, $columns, $key, $value);
     }
@@ -43,11 +43,17 @@ final class CustomerRepository extends AbstractRepository implements CustomerInt
     public function store(array $data)
     {
         return parent::create([
-            'first_name'    => e($data['first_name']),
-            'last_name'     => e($data['last_name']),
-            'email'         => e($data['email']),
-            'password'      => bcrypt($data['password']),
-            'notes'         => e($data['notes']),
+            'code'    => e($data['code']),
+            'name'     => e($data['name']),
+            'description'        => e($data['description']),
+            'timezone' => e($data['timezone']),
+            'theme'         => e($data['theme']),
+            'hostname'      => e($data['hostname']),
+            'logo'         => e($data['logo']),
+            'favicon'         => e($data['favicon']),
+            'home_page_content' => e($data['home_page_content']),
+            'footer_content' => e($data['footer_content']),
+
         ]);
     }
 
@@ -80,5 +86,4 @@ final class CustomerRepository extends AbstractRepository implements CustomerInt
     {
         return parent::delete($id);
     }
-
 }

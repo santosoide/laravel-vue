@@ -2,35 +2,27 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Domain\Contracts\CustomerInterface;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CustomerEditRequest;
-use App\Http\Requests\CustomerCreateRequest;
+use App\Domain\Contracts\ChannelInterface;
 
-class CustomerController extends Controller
+class ChannelController extends Controller
 {
-
-    /**
-     * @var CustomerInterface
-     */
-    protected $customer;
-
-    /**
-     * CustomerController constructor.
-     * @param CustomerInterface $customer
-     */
-    public function __construct(CustomerInterface $customer)
-    {
-        $this->customer = $customer;
-    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    protected $channel;
+
+    public function __construct(ChannelInterface $channel)
+    {
+        $this->channel = $channel;
+    }
+
     public function index()
     {
-        return $this->customer->paginate(10,  $columns = ['*'], 'email' ,''  );
+        return $this->channel->paginate(10,  $columns = ['*'], 'id', '');
     }
 
     /**
@@ -49,9 +41,9 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CustomerCreateRequest $request)
+    public function store(Request $request)
     {
-        return $this->customer->store($request->all());
+        return $this->channel->store($request->all());
     }
 
     /**
@@ -62,7 +54,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        return $this->customer->find($id);
+        return $this->channel->find($id);
     }
 
     /**
@@ -83,9 +75,9 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CustomerEditRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        return $this->customer->update($id, $request->all());
+        return $this->channel->update($id, $request->all());
     }
 
     /**
@@ -96,6 +88,6 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        return $this->customer->delete($id);
+        return $this->channel->delete($id);
     }
 }

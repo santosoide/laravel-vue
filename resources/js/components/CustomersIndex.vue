@@ -11,31 +11,20 @@
       <table class="table table-striped table-hover">
         <thead class="thead-light">
           <tr>
+            <th scope="col">Full Name</th>
             <th scope="col">Email</th>
-            <th scope="col">Gender</th>
-            <th scope="col">Phone</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="{ id, email, gender, phone } in customers">
-            <td>{{email}}</td>
-            <td>{{gender}}</td>
-            <td>{{phone}}</td>
+          <tr v-for="{ id, first_name, last_name, email } in customers">
+            <td>{{ first_name }} {{last_name}}</td>
+            <td>{{ email }}</td>
             <td>
               <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-2" role="group" aria-label="First group">
-                  <router-link
-                    class="btn btn-secondary"
-                    :to="{ name: 'customers.edit', params: { id } }"
-                  >Edit</router-link>
-                  <button
-                    type="button"
-                    class="btn btn-danger"
-                    data-toggle="modal"
-                    data-target="#exampleModal"
-                    @click="showModal({id, email, gender, phone})"
-                  >Delete</button>
+                  <router-link class="btn btn-secondary" :to="{ name: 'customers.edit', params: { id } }">Edit</router-link>
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" @click="showModal({ id, first_name, last_name , email })">Delete</button>
                 </div>
               </div>
             </td>
@@ -46,27 +35,12 @@
 
     <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
       <div class="btn-group mr-2" role="group" aria-label="First group">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          :disabled="! prevPage"
-          @click.prevent="goToPrev"
-        >Previous</button>
+        <button type="button" class="btn btn-secondary" :disabled="! prevPage" @click.prevent="goToPrev">Previous</button>
         <button type="button" class="btn btn-secondary" disabled>{{ paginationCount }}</button>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          :disabled="! nextPage"
-          @click.prevent="goToNext"
-        >Next</button>
+        <button type="button" class="btn btn-secondary" :disabled="! nextPage" @click.prevent="goToNext" >Next</button>
       </div>
     </div>
-    <modal
-      v-show="isModalVisible"
-      :customer="selectedCustomer"
-      @close="closeModal"
-      :method="deleteCustomer"
-    ></modal>
+    <modal v-show="isModalVisible" :data="selectedCustomer" @close="closeModal" :method="deleteCustomer"></modal>
   </div>
 </template>
 <script>
@@ -185,7 +159,6 @@ export default {
       if (err) {
         this.error = err.toString();
       } else {
-        console.log(data);
         this.customers = data.data;
         this.links = {
           first: data.first_page_url,
