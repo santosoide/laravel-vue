@@ -10,6 +10,8 @@
     >Customers</router-link>
     <router-link
       class="list-group-item list-group-item-action"
+      :to="{ name: 'subscribers.index' }"
+    >Subscriber</router-link>
       :to="{ name: 'channels.index' }"
     >Channels</router-link>
   </div>

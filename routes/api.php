@@ -21,3 +21,4 @@ Route::resource('users', 'Api\UserController')->except(['create', 'edit']);
 Route::resource('channels', 'Api\ChannelController')->except(['create', 'edit']);
 Route::resource('roles', 'Api\RoleController')->except(['create', 'edit']);
 Route::resource('customers', 'Api\CustomerController')->except(['create', 'edit']);
+Route::resource('subscribers', 'Api\SubscriberController')->except(['create', 'edit']);

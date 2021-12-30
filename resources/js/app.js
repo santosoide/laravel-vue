@@ -52,6 +52,10 @@ import CustomersIndex from './components/CustomersIndex'
 import CustomerCreate from './components/CustomerCreate'
 import CustomerEdit from './components/CustomerEdit'
 
+import SubscribersIndex from './components/SubscribersIndex'
+import SubscriberCreate from './components/SubscriberCreate'
+import SubscriberEdit from './components/SubscriberEdit'
+
 const router = new VueRouter({
     mode: 'history',
     routes: [
@@ -124,6 +128,21 @@ const router = new VueRouter({
             path: '/customers/:id/edit',
             name: 'customers.edit',
             component: CustomerEdit,
+        },
+        {
+            path: '/subscriber',
+            name: 'subscribers.index',
+            component: SubscribersIndex,
+        },
+        {
+            path: '/subscriber/create',
+            name: 'Subscriber.create',
+            component: SubscriberCreate,
+        },
+        {
+            path: '/subscriber/:id/edit',
+            name: 'Subscriber.edit',
+            component: SubscriberEdit,
         },
 
     ],

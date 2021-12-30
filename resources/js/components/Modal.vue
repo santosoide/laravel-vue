@@ -1,22 +1,22 @@
 <script>
-export default {
-  name: "modal",
-  props: {
-    method: { type: Function },
-    data: { type: Object }
-  },
-  data() {
-    return {};
-  },
-  methods: {
-    close() {
-      this.$emit("close");
-    },
-    onDelete() {
-      this.method(this.data.id);
-    }
-  }
-};
+    export default {
+        name: 'modal',
+        props: {
+            method: { type: Function },
+            data: {type: Object}
+        },
+        data() {
+            return {};
+        },
+        methods: {
+            close() {
+                this.$emit('close');
+            },
+            onDelete(){
+               this.method(this.data.id);
+            }
+        }
+    };
 </script>
 <template>
   <transition name="modal-fade">
